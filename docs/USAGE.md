@@ -32,11 +32,11 @@ This will start the HTTP server on port `4567` and start the process which updat
 
 ## Environment variables
 
-Setting environment variable on Mac OS / Linux `export IS_PRODUCTION=false`.
+Setting environment variable on Mac OS / Linux `export RACK_ENV=production`.
 
 | Name | Type | Description | Required? | Default |
 | ---- | ---- | ----------- | --------- | ------- |
-| IS_PRODUCTION | Boolean | Flag production environments | No | false |
+| RACK_ENV | String | Set the environment, e.g. "development", "production" | No | "development" |
 | REDIS_PATH | String | Path to socket for Redis connection | No | "" |
 | REDIS_URL | String | URI for Redis connection | No | "" |
 | DB_HOST | String | MySQL database host | No | "localhost" |

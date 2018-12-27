@@ -13,7 +13,7 @@ Dir.entries(processes_dir).each do |fname|
       "DB_UNAME" => ENV["DB_UNAME"],
       "DB_PASS" => ENV["DB_PASS"],
       "DB_PORT" => ENV["DB_PORT"],
-      "IS_PRODUCTION" => ENV["IS_PRODUCTION"]
+      "RACK_ENV" => ENV["RACK_ENV"]
     }
 
     w.name = "process:#{process_name}"

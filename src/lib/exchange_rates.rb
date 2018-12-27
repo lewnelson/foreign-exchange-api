@@ -11,7 +11,7 @@ module ExchangeRates
   def get_latest_rate_date
     cached = Cache::get_transport.get("ExchangeRates::get_latest_rate_date")
     if cached
-      return Date.strptime(cached, "%Y-%m-%d")
+      return Date.strptime(cached.to_s, "%Y-%m-%d")
     end
 
     db_client = Database.get_client
@@ -23,13 +23,13 @@ module ExchangeRates
 
     value = result.first["date_recorded"] rescue "0000-01-01"
     Cache::get_transport.set("ExchangeRates::get_latest_rate_date", value, 60 * 5)
-    return Date.strptime(value, "%Y-%m-%d")
+    return Date.strptime(value.to_s, "%Y-%m-%d")
   end
 
   def get_earliest_rate_date
     cached = Cache::get_transport.get("ExchangeRates::get_earliest_rate_date")
     if cached
-      return Date.strptime(cached, "%Y-%m-%d")
+      return Date.strptime(cached.to_s, "%Y-%m-%d")
     end
 
     db_client = Database.get_client
@@ -41,7 +41,7 @@ module ExchangeRates
 
     value = result.first["date_recorded"] rescue "0000-01-01"
     Cache::get_transport.set("ExchangeRates::get_earliest_rate_date", value, 60 * 5)
-    return Date.strptime(value, "%Y-%m-%d")
+    return Date.strptime(value.to_s, "%Y-%m-%d")
   end
 
   def check_currency_exists (currency_code, date)

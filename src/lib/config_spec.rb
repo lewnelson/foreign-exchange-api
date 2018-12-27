@@ -17,13 +17,13 @@ describe ForeignExchangeAPIConfig do
   end
 
   describe "is_production?" do
-    it "returns true when config for `IS_PRODUCTION` is 'true'" do
-      allow(ForeignExchangeAPIConfig).to receive(:get).with("IS_PRODUCTION").and_return("true")
+    it "returns true when config for `RACK_ENV` is 'production'" do
+      allow(ForeignExchangeAPIConfig).to receive(:get).with("RACK_ENV").and_return("production")
       expect(ForeignExchangeAPIConfig::is_production?).to eq(true)
     end
 
-    it "returns false when config for `IS_PRODUCTION` is not `true`" do
-      allow(ForeignExchangeAPIConfig).to receive(:get).with("IS_PRODUCTION").and_return("")
+    it "returns false when config for `RACK_ENV` is not `production`" do
+      allow(ForeignExchangeAPIConfig).to receive(:get).with("RACK_ENV").and_return("")
       expect(ForeignExchangeAPIConfig::is_production?).to eq(false)
     end
   end

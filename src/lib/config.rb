@@ -4,6 +4,6 @@ module ForeignExchangeAPIConfig
   end
 
   def self.is_production?
-    return get("IS_PRODUCTION") == "true"
+    return get("RACK_ENV") == "production"
   end
 end
