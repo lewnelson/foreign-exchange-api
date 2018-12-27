@@ -67,7 +67,7 @@ class Sinatra::Base
       end
       status 500
       content_type :json
-      body({ :error => "internal server error" }.to_json)
+      body({ :errors => [ "internal server error" ] }.to_json)
     end
   end
 

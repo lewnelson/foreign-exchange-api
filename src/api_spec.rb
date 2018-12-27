@@ -125,7 +125,7 @@ describe "GET /exchange-rate" do
           )
           expect(@browser.last_response.status).to eq(500)
           expect(@browser.last_response["Content-Type"]).to eq("application/json")
-          expect(@browser.last_response.body).to eq({ :error => "internal server error" }.to_json)
+          expect(@browser.last_response.body).to eq({ :errors => [ "internal server error" ] }.to_json)
         end
       end
 
