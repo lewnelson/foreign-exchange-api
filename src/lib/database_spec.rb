@@ -29,41 +29,5 @@ describe Database do
         expect(client).to be(Database::get_client)
       end
     end
-
-    describe "when it fails to instantiate Mysql2::Client" do
-      before(:each) do
-        Database.client nil
-        @error = StandardError.new("MySQL Error")
-        allow(Mysql2::Client).to receive(:new).and_raise(@error)
-        allow(ForeignExchangeAPILogger).to receive(:error)
-      end
-
-      it "logs the error" do
-        expect(ForeignExchangeAPILogger).to receive(:error).with({
-          "message" => "Error connecting to MySQL database",
-          "params" => {
-            "host" => "localhost",
-            "username" => "root",
-            "password" => "REDACTED",
-            "port" => 3306,
-            "database" => "foreign_exchange"
-          }
-        })
-        begin
-          Database::get_client
-          expect(true).to eq(false)
-        rescue StandardError => e
-        end
-      end
-
-      it "raises the error" do
-        begin
-          Database::get_client
-          expect(true).to eq(false)
-        rescue StandardError => e
-          expect(e).to be(@error)
-        end
-      end
-    end
   end
 end
