@@ -7,6 +7,8 @@ require_relative "lib/logger.rb"
 require_relative "lib/config.rb"
 
 class Sinatra::Base
+  set :server, "thin"
+
   def validate_input (date, from_currency_code, to_currency_code, amount = nil, amount_required = false)
     errors = Array.new
     if !Validator::validate_date(date)
