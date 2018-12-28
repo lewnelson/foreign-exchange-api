@@ -51,8 +51,8 @@ class Sinatra::Base
         to_currency_code
       )
       content_type :json
-      cache_control(:max_age => 60 * 60, :public => true, :must_revalidate => true)
       body({ :result => exchanged_rate }.to_json)
+      cache_control(:max_age => 60 * 60, :public => true, :must_revalidate => true)
       ForeignExchangeAPILogger::timing(start, {
         "route" => "GET /exchange-rate",
         "params" => params
@@ -94,8 +94,8 @@ class Sinatra::Base
         amount
       )
       content_type :json
-      cache_control(:max_age => 60 * 60, :public => true, :must_revalidate => true)
       body({ :result => exchanged_rate }.to_json)
+      cache_control(:max_age => 60 * 60, :public => true, :must_revalidate => true)
       ForeignExchangeAPILogger::timing(start, {
         "route" => "GET /exchange-currency",
         "params" => params
@@ -129,25 +129,25 @@ class Sinatra::Base
       return
     end
 
-    content_type :json
-    cache_control(:max_age => 60 * 15, :public => true, :must_revalidate => true)
+    content_type :json§
     body({ :result => Currencies::get_all(date) }.to_json)
+    cache_control(:max_age => 60 * 15, :public => true, :must_revalidate => true)
     ForeignExchangeAPILogger::timing(start, { "route" => "GET /supported-currencies" })
   end
 
   get "/earliest-supported-date" do
     start = Time.now
     content_type :json
-    cache_control(:max_age => 60 * 60, :public => true, :must_revalidate => true)
     body({ :result => ExchangeRates::get_earliest_rate_date.strftime("%Y-%m-%d") }.to_json)
+    cache_control(:max_age => 60 * 60, :public => true, :must_revalidate => true)
     ForeignExchangeAPILogger::timing(start, { "route" => "GET /earliest-supported-date" })
   end
 
   get "/latest-supported-date" do
     start = Time.now
     content_type :json
-    cache_control(:max_age => 60 * 5, :public => true, :must_revalidate => true)
     body({ :result => ExchangeRates::get_latest_rate_date.strftime("%Y-%m-%d") }.to_json)
+    cache_control(:max_age => 60 * 5, :public => true, :must_revalidate => true)
     ForeignExchangeAPILogger::timing(start, { "route" => "GET /latest-supported-date" })
   end
 end
