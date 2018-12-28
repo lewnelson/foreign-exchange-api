@@ -129,7 +129,7 @@ class Sinatra::Base
       return
     end
 
-    content_type :json§
+    content_type :json
     body({ :result => Currencies::get_all(date) }.to_json)
     cache_control(:max_age => 60 * 15, :public => true, :must_revalidate => true)
     ForeignExchangeAPILogger::timing(start, { "route" => "GET /supported-currencies" })
