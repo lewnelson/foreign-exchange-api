@@ -18,7 +18,8 @@ describe Database do
           :username => "root",
           :password => "",
           :port => 3306,
-          :database => "foreign_exchange"
+          :database => "foreign_exchange",
+          :reconnect => true
         )
         Database::get_client
       end

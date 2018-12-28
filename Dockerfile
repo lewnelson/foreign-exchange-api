@@ -25,4 +25,4 @@ COPY . /usr/src/app/
 
 EXPOSE 4567
 
-CMD ["./scripts/start.sh", "&&", "god restart"]
+CMD ["./scripts/start.sh"]

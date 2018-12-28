@@ -20,7 +20,8 @@ class Database
           :username => username,
           :password => password,
           :port => port,
-          :database => database
+          :database => database,
+          :reconnect => true
         )
       rescue StandardError => e
         ForeignExchangeAPILogger::error({
