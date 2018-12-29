@@ -90,7 +90,7 @@ module ExchangeRates
     check_date_is_in_range(date)
     check_currency_exists(from_currency_code, date)
     check_currency_exists(to_currency_code, date)
-    return get_currency_rate(from_currency_code, date).to_f / get_currency_rate(to_currency_code, date).to_f
+    return get_currency_rate(to_currency_code, date).to_f / get_currency_rate(from_currency_code, date).to_f
   end
 
   def exchange_currency (date, from_currency_code, to_currency_code, amount)
