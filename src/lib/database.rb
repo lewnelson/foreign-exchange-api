@@ -16,7 +16,9 @@ class Database
         :password => password,
         :port => port,
         :database => database,
-        :reconnect => true
+        :reconnect => true,
+        :read_timeout => 300,
+        :write_timeout => 300
       )
     rescue StandardError => e
       ForeignExchangeAPILogger::error({

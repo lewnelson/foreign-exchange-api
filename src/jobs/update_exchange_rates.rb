@@ -7,10 +7,10 @@ require_relative "../lib/timezoned_dates.rb"
 require_relative "../lib/logger.rb"
 
 class UpdateExchangeRates
-  def fetch_latest_rates (retries = 0)
+  def fetch_latest_rates ()
     rates = []
-    res = Net::HTTP.get_response(URI("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml"))
-    if res.is_a?(Net::HTTPSuccess)
+    res = Net::HTTP.get_response(URI("https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist-90d.xml")) rescue nil
+    if res && res.is_a?(Net::HTTPSuccess)
       xml_doc  = Nokogiri::XML(res.body)
       namespace = "http://www.ecb.int/vocabulary/2002-08-01/eurofxref"
       xml_doc.at_xpath("//eurofxref:Cube", "eurofxref" => namespace).children.each do |date_node|
@@ -18,11 +18,6 @@ class UpdateExchangeRates
         date_node.children.each do |currency_node|
           rates.push({ :date_recorded => date, :currency_code => currency_node[:currency], :rate => currency_node[:rate].to_f })
         end
-      end
-    else
-      if retries < 10
-        sleep 5
-        return self.fetch_latest_rates(retries + 1)
       end
     end
 
@@ -56,36 +51,26 @@ class UpdateExchangeRates
     return true
   end
 
-  def perform_in (t, attempt_count = 1)
-    sleep t
-    self.perform(attempt_count)
-  end
-
-  def perform (attempt_count = 1)
+  def perform ()
     ForeignExchangeAPILogger::info({
-      "message" => "Performing update_exchange_rates job attempt ##{attempt_count}"
+      "message" => "Performing update_exchange_rates"
     })
     difference_in_days = (TimezonedDates.today("+01:00") - ExchangeRates::get_latest_rate_date).to_i
     if difference_in_days >= 1
       result = self.add_new_rates?(self.fetch_latest_rates)
-      if !result && attempt_count < 5
-        self.perform_in(30, attempt_count + 1)
-      elsif !result
+      if !result
         ForeignExchangeAPILogger::error({
-          "message" => "Failed to update exchange rates after #{attempt_count} attempts, next update in 15 minutes"
+          "message" => "Failed to update exchange rates"
         })
-        self.perform_in(60 * 15)
       else
         ForeignExchangeAPILogger::info({
-          "message" => "Successfully updated exchange rates after #{attempt_count} attempts, next update in 15 minutes"
+          "message" => "Successfully updated exchange rates"
         })
-        self.perform_in(60 * 15)
       end
     else
       ForeignExchangeAPILogger::info({
-        "message" => "Already up to date, next update in 15 minutes"
+        "message" => "Already up to date"
       })
-      self.perform_in(60 * 15)
     end
   end
 end

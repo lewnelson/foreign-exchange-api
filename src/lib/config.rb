@@ -1,6 +1,6 @@
 module ForeignExchangeAPIConfig
   def self.get (key, fallback = "")
-    return ENV[key].length > 0 ? ENV[key] : fallback
+    return ENV[key] && ENV[key].length > 0 ? ENV[key] : fallback
   end
 
   def self.is_production?

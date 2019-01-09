@@ -207,13 +207,8 @@ describe UpdateExchangeRates do
 
           it "logs an error for being unable to update the rates" do
             expect(ForeignExchangeAPILogger).to receive(:error).with({
-              "message" => "Failed to update exchange rates after 5 attempts, next update in 15 minutes"
+              "message" => "Failed to update exchange rates after 5 attempts"
             })
-            @instance.perform(5)
-          end
-
-          it "calls perform_in to retry in 15 minutes" do
-            expect(@instance).to receive(:perform_in).with(60 * 15)
             @instance.perform(5)
           end
         end
@@ -222,13 +217,8 @@ describe UpdateExchangeRates do
       describe "when it successfully adds the new rates" do
         it "logs a success message" do
           expect(ForeignExchangeAPILogger).to receive(:info).with({
-            "message" => "Successfully updated exchange rates after 1 attempts, next update in 15 minutes"
+            "message" => "Successfully updated exchange rates after 1 attempts"
           })
-          @instance.perform()
-        end
-
-        it "calls perform_in to retry in 15 minutes" do
-          expect(@instance).to receive(:perform_in).with(60 * 15)
           @instance.perform()
         end
       end
@@ -241,13 +231,8 @@ describe UpdateExchangeRates do
 
       it "logs a message saying rates are up to date" do
         expect(ForeignExchangeAPILogger).to receive(:info).with({
-          "message" => "Already up to date, next update in 15 minutes"
+          "message" => "Already up to date"
         })
-        @instance.perform()
-      end
-
-      it "calls perform_in to retry in 15 minutes" do
-        expect(@instance).to receive(:perform_in).with(60 * 15)
         @instance.perform()
       end
     end
