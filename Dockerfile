@@ -32,4 +32,4 @@ RUN crontab /etc/cron.d/cron-tasks
 
 EXPOSE 4567
 
-CMD ["cron", "&&", "./scripts/docker_start.sh"]
+CMD ["./scripts/docker_start.sh"]
