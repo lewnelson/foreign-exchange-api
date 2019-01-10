@@ -50,24 +50,19 @@ The service requires a MySQL database in order to store the currency exchange ra
 
 Load schema from `database/schema.sql` into your MySQL database server. Note that the schema will drop tables before creating them so only do this when creating a new database. Ensure you set the correct environment variables to connect to your database, see [environment variables](#environment-variables).
 
+To load values into the database run
+```
+ruby src/cronjobs/update_exchange_rates.rb
+```
+This script is intended to be run as a cronjob and is used in the docker build running every 15 minutes.
+
 ## Redis setup
 
 This service optionally uses Redis to cache database queries. In order to make use of this simply provide either the `REDIS_PATH` or `REDIS_URL` environment variable, see [environment variables](#environment-variables).
 
-## Process management
-
-This service spawns multiple processes, these are controlled via [God](http://godrb.com/) a process monitoring framework. The `./scripts/start.sh` script starts up God with `config.god`. Each process in `src/processes/*` is started as its own process. Within God these are named as `process:<filename>`, e.g. `process:api_server`.
-
-To restart processes you can run:
-```
-god restart process:api_server
-```
-
-If any process were to crash, God will restart it. All processes will have log output to `logs/`. For more info on logs see [logging](#logging).
-
 ## Logging
 
-All output from STDOUT and STDERR from each process is written to log files under `logs/`. Each process has it's own log file `logs/<process_name>.log`, e.g. `logs/api_server.log`. These log files are up to date with the running process.
+`./scripts/start.sh` will direct STDOUT and STDERR to a file called `logs/api_server.log`.
 
 There are 2 scripts to manage logs:
 * `scripts/archive_logs.sh` - will create an archive for each processes log for the current date and copy the contents of the live log across. If an archive already exists it will append the contents of the live log to the archive. Once it has copied the contents it will clear the live log.
