@@ -8,22 +8,6 @@ describe UpdateExchangeRates do
     @instance = UpdateExchangeRates.new
   end
 
-  describe "perform_in" do
-    before(:each) do
-      allow(@instance).to receive(:perform)
-    end
-
-    it "calls sleep for t seconds" do
-      expect(@instance).to receive(:sleep).with(5)
-      @instance.perform_in(5, 3)
-    end
-
-    it "calls perform with the attempt count" do
-      expect(@instance).to receive(:perform).with(3)
-      @instance.perform_in(5, 3)
-    end
-  end
-
   describe "fetch_latest_rates" do
     describe "when successful" do
       before(:each) do
@@ -72,12 +56,6 @@ describe UpdateExchangeRates do
 
       it "returns an empty result set" do
         expect(@instance.fetch_latest_rates()).to eq(Array.new)
-      end
-
-      it "attempts to fetch the latest rates 10 times 5 seconds between each call" do
-        expect(@instance).to receive(:sleep).with(5)
-        expect(@instance).to receive(:sleep).exactly(9).times
-        @instance.fetch_latest_rates()
       end
     end
   end
@@ -178,46 +156,10 @@ describe UpdateExchangeRates do
     end
 
     describe "when todays rates have not been fetched" do
-      describe "when it fails to add new rates" do
-        before(:each) do
-          allow(@instance).to receive(:add_new_rates?).and_return(false)
-        end
-
-        describe "when the attempt count is less than 5" do
-          it "logs an attempt with the attempt count" do
-            expect(ForeignExchangeAPILogger).to receive(:info).with({
-              "message" => "Performing update_exchange_rates job attempt #1"
-            })
-            @instance.perform()
-          end
-
-          it "calls perform_in to retry in 30 seconds" do
-            expect(@instance).to receive(:perform_in).with(30, 2)
-            @instance.perform()
-          end
-        end
-
-        describe "when the attempt count is 5 or greated" do
-          it "logs an attempt with the attempt count" do
-            expect(ForeignExchangeAPILogger).to receive(:info).with({
-              "message" => "Performing update_exchange_rates job attempt #5"
-            })
-            @instance.perform(5)
-          end
-
-          it "logs an error for being unable to update the rates" do
-            expect(ForeignExchangeAPILogger).to receive(:error).with({
-              "message" => "Failed to update exchange rates after 5 attempts"
-            })
-            @instance.perform(5)
-          end
-        end
-      end
-
       describe "when it successfully adds the new rates" do
         it "logs a success message" do
           expect(ForeignExchangeAPILogger).to receive(:info).with({
-            "message" => "Successfully updated exchange rates after 1 attempts"
+            "message" => "Successfully updated exchange rates"
           })
           @instance.perform()
         end

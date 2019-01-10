@@ -19,7 +19,9 @@ describe Database do
           :password => "",
           :port => 3306,
           :database => "foreign_exchange",
-          :reconnect => true
+          :reconnect => true,
+          :read_timeout => 300,
+          :write_timeout => 300
         )
         Database::get_client
       end
