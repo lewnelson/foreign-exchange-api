@@ -24,12 +24,6 @@ RUN bundle install
 # Bundle app source
 COPY . /usr/src/app/
 
-# Setup cronjobs
-COPY crontab /etc/cron.d/cron-tasks
-RUN chmod +x /etc/cron.d/cron-tasks
-RUN touch /usr/src/app/logs/cron_update_exchange_rates.log
-RUN crontab /etc/cron.d/cron-tasks
-
 EXPOSE 4567
 
 CMD ["./scripts/docker_start.sh"]
