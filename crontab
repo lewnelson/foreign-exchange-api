@@ -1,4 +1,4 @@
-# m h dom mon dow user	command
-15 * * * * root ruby /usr/src/app/src/cronjobs/update_exchange_rates.rb >> /usr/src/app/logs/cron_update_exchange_rates.log 2>&1
-59 23 * * * root /usr/src/app/scripts/archive_logs.sh
-0 0 * * * root /usr/src/app/scripts/purge_logs.sh
+# m h dom mon dow	command
+15 * * * * ruby /usr/src/app/src/cronjobs/update_exchange_rates.rb >> /usr/src/app/logs/cron_update_exchange_rates.log 2>&1
+59 23 * * * /usr/src/app/scripts/archive_logs.sh
+0 0 * * * /usr/src/app/scripts/purge_logs.sh
